@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>A. Divakar | Full-Stack Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#040806;--bg2:#09120c;--ink:#e8fff0;--mute:#8fb39c;--neon:#39ff6a;--neon2:#b6ff3c;--line:rgba(57,255,106,.22);
+  --glow:0 0 12px rgba(57,255,106,.65),0 0 34px rgba(57,255,106,.35);
+  color-scheme:dark;box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-behavior:smooth;scroll-padding-top:calc(70px + env(safe-area-inset-top,0px))}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1.02rem/1.65 Manrope,system-ui,sans-serif;overflow-x:hidden}
+canvas#rain{position:fixed;inset:0;width:100%;height:100%;z-index:0;opacity:.28;pointer-events:none}
+.glowdot{position:fixed;width:420px;height:420px;border-radius:50%;left:0;top:0;z-index:0;pointer-events:none;
+  background:radial-gradient(circle,rgba(57,255,106,.16),transparent 65%);transform:translate(-50%,-50%)}
+main,header,footer{position:relative;z-index:1}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--neon);outline-offset:3px}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;justify-content:space-between;align-items:center;
+  padding:calc(14px + env(safe-area-inset-top,0px)) 5vw 14px;background:rgba(4,8,6,.72);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+nav b{font:900 1.05rem Unbounded,sans-serif;color:var(--neon);text-shadow:var(--glow);letter-spacing:.02em}
+nav ul{display:flex;gap:1.4rem;list-style:none;margin:0;padding:0}
+nav a{text-decoration:none;color:var(--mute);font-size:.92rem;transition:color .2s,text-shadow .2s}
+nav a:hover{color:var(--neon);text-shadow:var(--glow)}
+@media(max-width:720px){nav ul{display:none}}
+
+.wrap{max-width:1040px;margin:0 auto;padding:0 5vw}
+section{padding:96px 0 24px}
+h2{font:700 clamp(1.5rem,3.4vw,2.2rem)/1.15 Unbounded,sans-serif;margin:0 0 2rem;display:flex;align-items:center;gap:1rem}
+h2::after{content:"";height:1px;flex:1;background:linear-gradient(90deg,var(--neon),transparent);box-shadow:var(--glow)}
+
+/* hero */
+.hero{min-height:100svh;display:flex;align-items:center;padding-top:90px}
+.hero h1{font:900 clamp(3rem,11vw,8rem)/.95 Unbounded,sans-serif;margin:.2em 0 .25em;letter-spacing:-.03em}
+.hero h1 span{display:block;color:transparent;-webkit-text-stroke:2px var(--neon);text-shadow:var(--glow);animation:flick 5s 2.2s infinite}
+.hero h1 span+span{color:var(--neon);-webkit-text-stroke:0}
+.hello{color:var(--mute);margin:0}
+.role{font:500 clamp(1.05rem,2.4vw,1.5rem) Manrope,sans-serif;min-height:2em;color:var(--ink)}
+.role i{display:inline-block;width:.6ch;height:1.1em;background:var(--neon);vertical-align:-.15em;margin-left:3px;box-shadow:var(--glow);animation:blink 1s steps(1) infinite}
+.lead{max-width:56ch;color:var(--mute)}
+.btns{display:flex;flex-wrap:wrap;gap:14px;margin-top:2rem}
+.btn{padding:.85rem 1.5rem;border-radius:999px;border:1.5px solid var(--neon);text-decoration:none;font-weight:700;transition:transform .2s,box-shadow .2s,background .2s,color .2s}
+.btn.solid{background:var(--neon);color:#021006;box-shadow:var(--glow)}
+.btn:hover{transform:translateY(-3px);box-shadow:var(--glow)}
+.btn:not(.solid):hover{background:rgba(57,255,106,.1)}
+.in{opacity:0;transform:translateY(26px);animation:rise .8s cubic-bezier(.2,.7,.2,1) forwards}
+.in:nth-child(1){animation-delay:.1s}.in:nth-child(2){animation-delay:.25s}.in:nth-child(3){animation-delay:.45s}.in:nth-child(4){animation-delay:.65s}.in:nth-child(5){animation-delay:.8s}
+@keyframes rise{to{opacity:1;transform:none}}
+@keyframes blink{50%{opacity:0}}
+@keyframes flick{0%,92%,100%{opacity:1}93%{opacity:.4}94%{opacity:1}96%{opacity:.55}97%{opacity:1}}
+
+/* content */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .7s,transform .7s}
+.reveal.on{opacity:1;transform:none}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:2rem}
+.stat{border:1px solid var(--line);border-radius:14px;padding:1rem 1.2rem;background:var(--bg2)}
+.stat b{display:block;font:700 1.6rem Unbounded,sans-serif;color:var(--neon);text-shadow:var(--glow)}
+.stat span{color:var(--mute);font-size:.88rem}
+
+.skills{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.skill{border:1px solid var(--line);border-radius:16px;padding:1.2rem;background:var(--bg2);transition:border-color .25s,box-shadow .25s}
+.skill:hover{border-color:var(--neon);box-shadow:0 0 24px rgba(57,255,106,.18)}
+.skill h3{margin:0 0 .8rem;font:700 .95rem Unbounded,sans-serif;color:var(--neon)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips span{padding:.28rem .7rem;border-radius:999px;border:1px solid var(--line);font-size:.86rem;transition:background .2s,color .2s}
+.chips span:hover{background:var(--neon);color:#021006}
+
+.tl{border-left:2px solid var(--line);margin-left:6px;padding-left:28px;display:grid;gap:30px}
+.tl article{position:relative}
+.tl article::before{content:"";position:absolute;left:-37px;top:.55rem;width:14px;height:14px;border-radius:50%;background:var(--neon);box-shadow:var(--glow)}
+.tl h3{margin:0;font:700 1.15rem Unbounded,sans-serif}
+.tl small{color:var(--neon);font-weight:700}
+.tl ul{margin:.6rem 0 0;padding-left:1.1rem;color:var(--mute)}
+.tl li{margin:.3rem 0}
+
+.proj{display:grid;gap:18px}
+.card{border:1px solid var(--line);border-radius:20px;padding:1.6rem;background:linear-gradient(160deg,var(--bg2),#050b07);position:relative;overflow:hidden;transition:border-color .3s}
+.card::before{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 40%,rgba(57,255,106,.12) 50%,transparent 60%);transform:translateX(-120%);transition:transform .9s}
+.card:hover{border-color:var(--neon)}
+.card:hover::before{transform:translateX(120%)}
+.card h3{margin:0 0 .3rem;font:700 1.3rem Unbounded,sans-serif}
+.card p{color:var(--mute);margin:.4rem 0 1rem}
+.live{display:inline-flex;align-items:center;gap:8px;font-weight:700;color:var(--neon);text-decoration:none}
+.live::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--neon);box-shadow:var(--glow);animation:pulse 1.6s infinite}
+@keyframes pulse{50%{transform:scale(1.7);opacity:.4}}
+
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.contact{text-align:center;padding-bottom:60px}
+.contact h2{justify-content:center}.contact h2::after{display:none}
+.contact .big{font:900 clamp(1.4rem,4.5vw,2.6rem) Unbounded,sans-serif;color:var(--neon);text-shadow:var(--glow);word-break:break-all;text-decoration:none}
+.contact p{color:var(--mute)}
+footer{text-align:center;color:var(--mute);font-size:.85rem;padding:24px 5vw calc(30px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line)}
+@media(prefers-reduced-motion:reduce){.hero h1 span{animation:none!important}}
+</style>
+</head>
+<body>
+<canvas id="rain" aria-hidden="true"></canvas>
+<div class="glowdot" id="glow" aria-hidden="true"></div>
+
+<nav>
+  <b>AD//</b>
+  <ul>
+    <li><a href="#about">About</a></li><li><a href="#skills">Skills</a></li><li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li><li><a href="#education">Education</a></li><li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="hello in">Hi, I’m</p>
+    <h1 class="in"><span>Divakar</span><span>Anand</span></h1>
+    <div class="role in" aria-live="polite"><span id="typed"></span><i></i></div>
+    <p class="lead in">MCA student at PSG College of Technology. I build full-stack apps with React, Spring Boot and Python, and my campus lost-and-found platform is live and used by classmates.</p>
+    <div class="btns in">
+      <a class="btn solid" href="https://lofo-brown.vercel.app/" target="_blank" rel="noopener">See LOFO live</a>
+      <a class="btn" href="#contact">Get in touch</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="about">
+    <h2 class="reveal">About</h2>
+    <p class="reveal" style="max-width:68ch">I’m an aspiring Python developer who works across Python, Java and JavaScript. I’ve built REST APIs, relational data layers, authentication, role-based access and full application workflows, and I enjoy collaborating on code with a team. I’m also an AWS re/Start graduate.</p>
+    <div class="stats reveal">
+      <div class="stat"><b>3</b><span>Languages: Python, Java, JavaScript</span></div>
+      <div class="stat"><b>Live</b><span>LOFO used by classmates</span></div>
+      <div class="stat"><b>4</b><span>Person hackathon team</span></div>
+      <div class="stat"><b>AWS</b><span>re/Start graduate</span></div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <h2 class="reveal">Skills</h2>
+    <div class="skills">
+      <div class="skill reveal"><h3>Languages</h3><div class="chips"><span>Python</span><span>Java</span><span>JavaScript</span></div></div>
+      <div class="skill reveal"><h3>Frontend</h3><div class="chips"><span>React</span><span>React Router</span><span>Vite</span><span>HTML5</span><span>CSS3</span></div></div>
+      <div class="skill reveal"><h3>Backend and APIs</h3><div class="chips"><span>Spring Boot</span><span>Node.js</span><span>Express.js</span><span>RESTful APIs</span></div></div>
+      <div class="skill reveal"><h3>Databases</h3><div class="chips"><span>MySQL</span><span>MongoDB</span></div></div>
+      <div class="skill reveal"><h3>Tools and platforms</h3><div class="chips"><span>Git</span><span>GitHub</span><span>Maven</span><span>Docker</span><span>Vercel</span></div></div>
+      <div class="skill reveal"><h3>Cloud and concepts</h3><div class="chips"><span>AWS Fundamentals</span><span>OOP</span><span>CRUD</span><span>Authentication</span><span>RBAC</span><span>API Integration</span><span>Debugging</span></div></div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <h2 class="reveal">Experience</h2>
+    <div class="tl">
+      <article class="reveal">
+        <h3>Java Developer Intern</h3><small>Centrico</small>
+        <ul>
+          <li>Developed and tested Java-based application modules in a professional software environment.</li>
+          <li>Applied core engineering practices while debugging, implementing features and delivering code with the team.</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section id="projects">
+    <h2 class="reveal">Projects</h2>
+    <div class="proj">
+      <article class="card reveal">
+        <h3>LOFO: Campus Lost-and-Found</h3>
+        <p>Students report, browse and claim misplaced items. It’s deployed and used by classmates.</p>
+        <div class="chips" style="margin-bottom:1rem"><span>React</span><span>Vite</span><span>Java 17</span><span>Spring Boot</span><span>JPA / Hibernate</span><span>MySQL / H2</span><span>BCrypt</span></div>
+        <ul style="color:var(--mute);padding-left:1.1rem;margin:0 0 1.2rem">
+          <li>Item creation, search and filtering, user profiles, claim submission and admin claim verification.</li>
+          <li>Login sessions, BCrypt password hashing and role-based access control.</li>
+          <li>In-app notifications, email delivery, image uploads, location coordinates and audit logs.</li>
+        </ul>
+        <a class="live" href="https://lofo-brown.vercel.app/" target="_blank" rel="noopener">Open lofo-brown.vercel.app</a>
+      </article>
+      <article class="card reveal">
+        <h3>Hand Sign Recognition System</h3>
+        <p>A Python project that uses Pandas and NumPy to preprocess gesture data, extract features and clean raw input into feature sets for gesture classification.</p>
+        <div class="chips"><span>Python</span><span>Pandas</span><span>NumPy</span></div>
+      </article>
+    </div>
+  </section>
+
+  <section id="education">
+    <h2 class="reveal">Education and achievements</h2>
+    <div class="two">
+      <div class="tl reveal">
+        <article><h3>MCA</h3><small>2025 to 2027 (pursuing)</small><ul style="list-style:none;padding:0"><li>PSG College of Technology, Coimbatore</li></ul></article>
+        <article><h3>BCA</h3><small>2022 to 2025</small><ul style="list-style:none;padding:0"><li>Gurunanak College, Chennai</li></ul></article>
+      </div>
+      <div class="card reveal">
+        <h3 style="font-size:1.05rem">Highlights</h3>
+        <ul style="color:var(--mute);padding-left:1.1rem;margin:.6rem 0 0">
+          <li>AWS re/Start graduate, Amazon Web Services Training and Certification.</li>
+          <li>Built and deployed a real-time app with a four-member team at the PSG Tech Enterprise Computing Hackathon.</li>
+          <li>Contributed to system architecture, request flow and data modelling with secure coding practices.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <h2 class="reveal">Let’s build something</h2>
+    <p class="reveal">Open to internships and junior full-stack roles. Chennai, India.</p>
+    <a class="big reveal" href="mailto:divakaranand345@gmail.com">divakaranand345@gmail.com</a>
+    <div class="btns reveal" style="justify-content:center">
+      <a class="btn" href="tel:+918754458363">+91 87544 58363</a>
+      <a class="btn solid" href="https://linkedin.com/in/divakar-anand-771bb5257" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </section>
+</main>
+
+<footer>© 2026 A. Divakar</footer>
+
+<script>
+(function(){
+  var reduce=false;
+  // typing roles
+  var roles=['Full-Stack Developer','Python Developer','Spring Boot + React builder','AWS re/Start graduate'];
+  var el=document.getElementById('typed'),r=0,c=0,del=false;
+  if(reduce){el.textContent=roles[0]}else{(function tick(){
+    var w=roles[r];el.textContent=w.slice(0,c);
+    if(!del&&c===w.length){del=true;return setTimeout(tick,1500)}
+    if(del&&c===0){del=false;r=(r+1)%roles.length}
+    c+=del?-1:1;setTimeout(tick,del?35:70);
+  })()}
+  // scroll reveal
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target)}})},{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(function(n){io.observe(n)});
+  // cursor glow
+  var g=document.getElementById('glow');
+  addEventListener('pointermove',function(e){g.style.transform='translate('+e.clientX+'px,'+e.clientY+'px) translate(-50%,-50%)'});
+  // code rain
+  if(reduce)return;
+  var cv=document.getElementById('rain'),x=cv.getContext('2d'),cols,drops,fs=16;
+  var chars='01{}<>/;=+*#$&'.split('');
+  function size(){cv.width=innerWidth;cv.height=innerHeight;cols=Math.ceil(cv.width/fs);drops=Array.from({length:cols},function(){return Math.random()*-50})}
+  size();addEventListener('resize',size);
+  setInterval(function(){
+    x.fillStyle='rgba(4,8,6,.14)';x.fillRect(0,0,cv.width,cv.height);
+    x.fillStyle='#39ff6a';x.font=fs+'px monospace';
+    for(var i=0;i<cols;i++){
+      if(drops[i]>0)x.fillText(chars[Math.floor(Math.random()*chars.length)],i*fs,drops[i]*fs);
+      if(drops[i]*fs>cv.height&&Math.random()>.975)drops[i]=0;
+      drops[i]++;
+    }
+  },60);
+})();
+</script>
+</body>
+</html>
